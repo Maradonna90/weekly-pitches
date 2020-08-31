@@ -1,6 +1,8 @@
 from pybaseball import statcast as sc
 import math
 from pybaseball import playerid_lookup
+from bs4 import BeautifulSoup
+import requests
 
 
 def distance_point_to_strikezone(inp):
@@ -34,7 +36,7 @@ def distance_point_to_strikezone(inp):
 
 
 def savant_clip(pitch):
-    clip_url = "https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=&hfBBT=&hfPR=&hfZ=&stadium=&hfBBL=&hfNewZones=&hfGT=R%7C&hfC=[count]%7C&hfSea=[season]%7C&hfSit=&player_type=pitcher&hfOuts=[outs]%7C&opponent=&pitcher_throws=&batter_stands=&hfSA=&game_date_gt=[date_min]&game_date_lt=[date_max]&hfInfield=&team=&position=&hfOutfield=&hfRO=&home_road=&hfFlag=&hfPull=&pitchers_lookup%5B%5D=[pitcher_id]&metric_1=&hfInn=[Inning]|&min_pitches=0&min_results=0&group_by=name&sort_col=pitches&player_event_sort=h_launch_speed&sort_order=desc&min_pas=0&type=details&player_id=[pitcher_id]"
+    clip_url = "https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=&hfBBT=&hfPR=&hfZ=&stadium=&hfBBL=&hfNewZones=&hfGT=R%7C&hfC=[count]%7C&hfSea=[season]%7C&hfSit=&player_type=pitcher&hfOuts=[outs]%7C&opponent=&pitcher_throws=&batter_stands=&hfSA=&game_date_gt=[date_min]&game_date_lt=[date_max]&hfInfield=&team=&position=&hfOutfield=&hfRO=&home_road=&hfFlag=&hfPull=&pitchers_lookup%5B%5D=[pitcher_id]&metric_1=api_p_release_speed&metric_1_gt=[min_speed]&metric_1_lt=[max_speed]&hfInn=[Inning]|&min_pitches=0&min_results=0&group_by=name&sort_col=pitches&player_event_sort=h_launch_speed&sort_order=desc&min_pas=0&type=details&player_id=[pitcher_id]"
     p_name = pitch['player_name'].split()
     p_id = playerid_lookup(p_name[1], p_name[0])['key_mlbam'].values
     pitch_map = {
@@ -44,12 +46,18 @@ def savant_clip(pitch):
         "[date_max]": date_max,
         "[count]": str(int(pitch['balls']))+str(int(pitch['strikes'])),
         "[season]": "2020",
-        "[outs]": int(pitch['outs_when_up'])
+        "[outs]": int(pitch['outs_when_up']),
+        "[min_speed]": int(pitch["release_speed"]-1),
+        "[max_speed]": int(pitch["release_speed"]+1)
     }
-    print(pitch_map)
+    #print(pitch_map)
     for k, v in pitch_map.items():
         clip_url = clip_url.replace(k, str(v))
-    print(clip_url)
+    #print(clip_url)
+    site = requests.get(clip_url)
+    soup = BeautifulSoup(site.text, features="lxml")
+    for link in soup.find_all('a'):
+        print(link.get('href'))
     # TODO get clip url
 
 
@@ -77,7 +85,3 @@ miss.insert(0, "zone_distance", value=distances)
 miss = miss.loc[miss['zone_distance'] > 0]
 miss = miss.nlargest(3, columns=["zone_distance"])
 print("miss & swings\n", miss.loc[:, ["zone_distance"] + general_cols])
-
-# https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=&hfBBT=&hfPR=&hfZ=&stadium=&hfBBL=&hfNewZones=&hfGT=R%7C&hfC=02%7C&hfSea=2020%7C&hfSit=&player_type=pitcher&hfOuts=1%7C&opponent=&pitcher_throws=&batter_stands=&hfSA=&game_date_gt=2020-08-20&game_date_lt=2020-08-20&hfInfield=&team=&position=&hfOutfield=&hfRO=&home_road=&hfFlag=&hfPull=&pitchers_lookup%5B%5D=425794&metric_1=&hfInn=7%7C&min_pitches=0&min_results=0&group_by=name&sort_col=pitches&player_event_sort=h_launch_speed&sort_order=desc&min_pas=0#results
-# https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=&hfBBT=&hfPR=&hfZ=&stadium=&hfBBL=&hfNewZones=&hfGT=R%7C&hfC=[count]%7C&hfSea=[season]%7C&hfSit=&player_type=pitcher&hfOuts=[outs]%7C&opponent=&pitcher_throws=&batter_stands=&hfSA=&game_date_gt=[date_min]&game_date_lt=[date_max]&hfInfield=&team=&position=&hfOutfield=&hfRO=&home_road=&hfFlag=&hfPull=&pitchers_lookup%5B%5D=[pitcher_id]&metric_1=&hfInn=[Inning]&min_pitches=0&min_results=0&group_by=name&sort_col=pitches&player_event_sort=h_launch_speed&sort_order=desc&min_pas=0#results
-
