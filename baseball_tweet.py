@@ -38,7 +38,7 @@ class Baseball_tweet:
             media_ids = [media.media_id_string]
             print(media_ids)
             print(tweet_text)
-            # status = self.api.update_status(status=tweet_text, media_ids=media_ids)
+            status = self.api.update_status(status=tweet_text, media_ids=media_ids)
             os.remove(video)
 
     def calc_metric(self):
