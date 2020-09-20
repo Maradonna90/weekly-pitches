@@ -69,7 +69,7 @@ class Wiff_pitch(Baseball_tweet):
         metric_data['url'] = metric_data.apply(utils.savant_clip, axis=1, date_min=self.date_min, date_max=self.date_max)
         self.ranked_data = metric_data
 
-    def calc_metric(inp):
+    def calc_metric(self, inp):
         x, y = inp[0], inp[1]
         x_min = -1
         x_max = 1
