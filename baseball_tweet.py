@@ -86,5 +86,4 @@ class Framed_pitch(Baseball_tweet):
         print(metric_data.loc[:, [row] + self.general_cols])
         metric_data['url'] = metric_data.apply(utils.savant_clip, axis=1, date_min=self.date_min, date_max=self.date_max)
         metric_data["player_name"] = catchers.values
-        print(metric_data.loc[:, ['url']].to_string())
         self.ranked_data = metric_data
