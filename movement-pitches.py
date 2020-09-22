@@ -25,6 +25,6 @@ data = sc(start_dt=date_min, end_dt=date_max)
 general_cols = ["player_name", "game_date", "home_team", "away_team", "inning", "inning_topbot", "outs_when_up", "balls", "strikes", "pitch_number"]
 
 # 3 most movement
-movement_tweet = baseball_tweet.Movement_pitch(api, "Last weeks #{0} pitch with most movement by {1}, {2:.2f} inches of total movement!", general_cols, date_min, date_max)
+movement_tweet = baseball_tweet.Movement_pitch(api, "Last weeks #{0} pitch with most movement by {1}, {2:.2f} inches of total movement! 💫💫💫", general_cols, date_min, date_max)
 movement_tweet.rank_data(data, "total_move")
 movement_tweet.post_tweet()

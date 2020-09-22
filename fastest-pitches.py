@@ -25,6 +25,6 @@ data = sc(start_dt=date_min, end_dt=date_max)
 general_cols = ["player_name", "game_date", "home_team", "away_team", "inning", "inning_topbot", "outs_when_up", "balls", "strikes", "pitch_number"]
 
 # 3 fastest pitches
-fastest_tweet = baseball_tweet.Baseball_tweet(api, "Last weeks #{0} fastest pitch by {1} with {2} MPH!🔥", general_cols, date_min, date_max)
+fastest_tweet = baseball_tweet.Baseball_tweet(api, "Last weeks #{0} fastest pitch by {1} with {2} MPH! 🔥🔥🔥", general_cols, date_min, date_max)
 fastest_tweet.rank_data(data, "release_speed")
 fastest_tweet.post_tweet()

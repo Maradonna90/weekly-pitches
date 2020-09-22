@@ -25,6 +25,6 @@ data = sc(start_dt=date_min, end_dt=date_max)
 general_cols = ["player_name", "game_date", "home_team", "away_team", "inning", "inning_topbot", "outs_when_up", "balls", "strikes", "pitch_number"]
 
 # swing and miss farthest from zone, plate_x, plate_z
-framed_tweet = baseball_tweet.Framed_pitch(api, "Last weeks #{0} greatest frame by {1} with {2:.2f} ft to the zone!", general_cols, date_min, date_max)
+framed_tweet = baseball_tweet.Framed_pitch(api, "Last weeks #{0} greatest frame by {1} with {2:.2f}ft to the zone! 👀👀👀", general_cols, date_min, date_max)
 framed_tweet.rank_data(data, "zone_distance")
 framed_tweet.post_tweet()
